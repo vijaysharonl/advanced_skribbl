@@ -18,10 +18,8 @@ const io = new Server(server, {
 const rooms = {};
 
 // 🔹 Word Bank
-const WORDS = [
-  "banana", "hotdog", "sausage", "pickle", "melons", "pizza", "sandwich", "cookie",
-  "heart", "camera", "phone", "light", "tree", "car", "guitar", "rocket"
-];
+const WORDS = ['banana', 'hotdog', 'sausage', 'pickle', 'melons', 'peaches', 'eggplant', 'donut', 'taco', 'bun', 'muffin', 'cream', 'popsicle', 'burrito', 'sandwich', 'nacho', 'cookie', 'lollipop', 'kiss', 'bed', 'shower', 'undies', 'bra', 'boxer', 'heels', 'lipstick', 'selfie', 'wink', 'bikini', 'blush', 'pillow', 'mirror', 'perfume', 'handcuffs', 'blanket', 'candle', 'chocolate', 'whip', 'massage', 'belly', 'tongue', 'beard', 'eyebrow', 'icecube', 'lotion', 'towel', 'pajamas', 'diary', 'poop', 'fart', 'toilet', 'underwear', 'hairbrush', 'sneeze', 'pussycat', 'rooster', 'monkey', 'donkey', 'duck', 'cow', 'pig', 'disco', 'wine', 'shot', 'champagne', 'cocktail', 'straw', 'couch', 'belt', 'tie', 'boots', 'necklace', 'sunglasses', 'wet', 'hot', 'sticky', 'sweaty', 'juicy', 'spicy', 'rough', 'smooth', 'clown', 'slipper', 'remote', 'balloon', 'soap', 'bathtub', 'rubberduck', 'bubbles', 'steam', 'sponge', 'naughty', 'secret', 'spy', 'kissmark', 'whisper', 'dare', 'truth', 'flirt', 'filter', 'emoji', 'hashtag', 'like', 'meme', 'honey', 'sugar', 'candy', 'icecream', 'milkshake', 'date', 'rose', 'heart', 'cupid', 'valentine', 'couple', 'hug', 'wink', 'lick', 'bite', 'chase', 'drool', 'sock', 'wig', 'sweat', 'dance', 'twerk', 'karaoke', 'pizza', 'toast', 'popcorn', 'burger', 'fries', 'onion', 'cheese', 'potato', 'chips', 'marshmallow', 'coffee', 'beer', 'milk', 'fork', 'spoon', 'knife', 'lunchbox', 'basket', 'lipgloss', 'bracelet', 'watch', 'charger', 'laptop', 'keyboard', 'backpack', 'wallet', 'ribbon', 'balloon', 'confetti', 'cake', 'candle', 'guitar', 'drum', 'violin', 'piano', 'microphone', 'speaker', 'heartbeat', 'devil', 'fire', 'moon', 'star', 'rocket', 'alien', 'mermaid', 'unicorn', 'dragon', 'genie', 'witch', 'vampire', 'ghost', 'angel', 'halo', 'seduce', 'cuddle', 'tickle', 'dance', 'jump', 'slide', 'spin', 'chase', 'hide', 'peek', 'spy', 'sneak', 'snap', 'stretch', 'pose', 'laugh', 'scream', 'sleep', 'dream', 'jump', 'crawl', 'run', 'fly', 'swim', 'surf', 'float', 'dive', 'twirl', 'shake', 'bounce', 'climb', 'fall', 'chase', 'grab', 'tug', 'poke', 'tap', 'pull', 'push', 'kick', 'punch', 'smack', 'slap', 'sniff', 'snore', 'yawn', 'stretch', 'blink', 'sweat', 'shiver', 'chill', 'heat', 'steam', 'splash', 'smoke', 'fire', 'rain', 'thunder', 'lightning', 'shadow', 'glow', 'spark', 'flame', 'cloud', 'wave', 'breeze', 'storm', 'tornado', 'volcano', 'earth', 'ocean', 'island', 'beach', 'cave', 'forest', 'jungle', 'desert', 'mountain', 'valley', 'river', 'lake', 'waterfall', 'rope', 'chain', 'mask', 'shorts', 'shirt', 'jacket', 'crown', 'tattoo', 'phone', 'camera', 'charger', 'laptop', 'keyboard', 'mouse', 'chair', 'couch', 'door', 'window', 'curtain', 'closet', 'key', 'lock', 'bell', 'alarm', 'fan', 'light', 'switch', 'battery', 'knife', 'scissors', 'razor', 'toothbrush', 'hairdryer', 'ribbon', 'string', 'paper', 'book', 'pen', 'pencil', 'marker', 'note', 'card', 'coin', 'ticket', 'map', 'bag', 'backpack', 'bottle', 'calendar', 'clock', 'speaker', 'guitar', 'drum', 'piano', 'disco', 'stage', 'curtain', 'shadow', 'moonlight', 'heart'];
+
 
 // 🌀 Move to next drawer
 function startNextTurn(roomCode) {
@@ -39,7 +37,14 @@ function startNextTurn(roomCode) {
   room.currentDrawer = drawerId;
   room.currentWord = null;
 
-  const wordOptions = WORDS.sort(() => 0.5 - Math.random()).slice(0, 3);
+  // 🎯 Pick 3 fully random, non-repeating words without mutating the main array
+  const shuffled = [...WORDS];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+  [  shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  const wordOptions = shuffled.slice(0, 3);
+
   io.to(drawerId).emit("wordOptions", wordOptions);
   io.to(roomCode).emit("drawerSelected", room.players[drawerId].name);
 }
