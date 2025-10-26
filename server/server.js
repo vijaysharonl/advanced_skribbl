@@ -241,13 +241,16 @@ io.on("connection", (socket) => {
 
 // ✅ Serve React Build (Render Compatible)
 // ✅ Serve React Build (Render Compatible)
-const clientPath = path.join(__dirname, "../client/build");
+// ✅ Serve Vite build (dist instead of build)
+const clientPath = path.join(__dirname, "../client/dist");
 app.use(express.static(clientPath));
 
-// ✅ Express v5 safe fallback
+// ✅ Express v5-safe fallback
 app.use((req, res) => {
   res.sendFile(path.join(clientPath, "index.html"));
 });
 
+// ✅ Dynamic Render Port
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
