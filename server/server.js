@@ -38,12 +38,7 @@ function startNextTurn(roomCode) {
   room.currentWord = null;
 
   // 🎯 Pick 3 fully random, non-repeating words without mutating the main array
-  const shuffled = [...WORDS];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-  [  shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  const wordOptions = shuffled.slice(0, 3);
+  const wordOptions = WORDS.sort(() => 0.5 - Math.random()).slice(0, 3);
 
   io.to(drawerId).emit("wordOptions", wordOptions);
   io.to(roomCode).emit("drawerSelected", room.players[drawerId].name);
