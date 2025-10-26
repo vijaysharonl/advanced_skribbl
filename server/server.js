@@ -240,12 +240,14 @@ io.on("connection", (socket) => {
 });
 
 // ✅ Serve React Build (Render Compatible)
+// ✅ Serve React Build (Render Compatible)
 const clientPath = path.join(__dirname, "../client/build");
 app.use(express.static(clientPath));
-app.get("*", (req, res) => {
+
+// ✅ Express v5 safe fallback
+app.use((req, res) => {
   res.sendFile(path.join(clientPath, "index.html"));
 });
 
-// ✅ Dynamic Port
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
