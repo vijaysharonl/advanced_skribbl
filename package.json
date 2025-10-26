@@ -1,10 +1,10 @@
 {
-  "name": "advanced_skribbl",
+  "name": "skribbl-fullstack",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "install": "cd client && npm install && cd ../server && npm install",
-    "build": "cd client && npm run build",
-    "start": "cd server && npm start"
+    "install": "npm install --prefix client && npm install --prefix server",
+    "build": "npm run build --prefix client",
+    "start": "npm start --prefix server"
   }
 }
